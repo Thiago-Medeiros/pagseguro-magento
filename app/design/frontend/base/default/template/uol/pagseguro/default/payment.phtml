@@ -1,0 +1,21 @@
+<script type="text/javascript"
+        src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+</script>
+
+<div class="page-head">
+    <h2 class="sub-title">Finalizando sua compra com PagSeguro</h2>
+</div>
+<script type="text/javascript">
+    window.onload = function () {
+        window.open('<?= Mage::registry('link') ?>', '_blank');
+    };
+</script>
+<table style="width:100%;">
+    <tr>
+        <td style="width:100%">
+            Sa compra está em processo de finalização, aguarde um instante.<br>
+            Casa a página de pagamento não iniciar automaticamente
+            <a href="<?= Mage::registry('link') ?>" target="_blank">clique aqui</a>.
+        </td>
+    </tr>
+</table>
