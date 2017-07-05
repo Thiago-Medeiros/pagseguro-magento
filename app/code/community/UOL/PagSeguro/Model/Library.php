@@ -10,17 +10,9 @@ class UOL_PagSeguro_Model_Library
      */
     public function __construct()
     {
-        $this->initialize();
         define("SHIPPING_TYPE", 3);
         define("SHIPPING_COST", 0.00);
         define("CURRENCY", "BRL");
-    }
-
-    /**
-     *
-     */
-    private function initialize()
-    {
         \PagSeguro\Library::initialize();
         \PagSeguro\Library::cmsVersion()->setName('PagSeguro')->setRelease('1.0.0'); //TODO localizr no sistema
         \PagSeguro\Library::moduleVersion()->setName('Magento')->setRelease('1.0.0'); //TODO localizr no sistema
@@ -54,6 +46,8 @@ class UOL_PagSeguro_Model_Library
         if (Mage::getStoreConfig('payment/pagseguro/log')) {
             \PagSeguro\Configuration\Configure::setLog(true,
                 Mage::getBaseDir().Mage::getStoreConfig('payment/pagseguro/log'));
+        } else {
+            \PagSeguro\Configuration\Configure::setLog(false, null);
         }
     }
 
@@ -73,7 +67,7 @@ class UOL_PagSeguro_Model_Library
     /**
      * @return mixed
      */
-    public function getEnvironment()
+    public function getCharset()
     {
         return Mage::getStoreConfig('payment/pagseguro/environment');
     }
@@ -81,9 +75,9 @@ class UOL_PagSeguro_Model_Library
     /**
      * @return mixed
      */
-    public function getPaymentCheckoutType()
+    public function getEnvironment()
     {
-        return Mage::getStoreConfig('payment/pagseguro/checkout');
+        return Mage::getStoreConfig('payment/pagseguro/environment');
     }
 
     /**
@@ -97,8 +91,8 @@ class UOL_PagSeguro_Model_Library
     /**
      * @return mixed
      */
-    public function getCharset()
+    public function getPaymentCheckoutType()
     {
-        return Mage::getStoreConfig('payment/pagseguro/environment');
+        return Mage::getStoreConfig('payment/pagseguro/checkout');
     }
 }
