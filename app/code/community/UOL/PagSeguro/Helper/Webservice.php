@@ -32,6 +32,7 @@ class UOL_PagSeguro_Helper_Webservice extends UOL_PagSeguro_Helper_Data
      */
     public function __construct()
     {
+        parent::__construct();
         $this->library = new UOL_PagSeguro_Model_Library();
     }
 
