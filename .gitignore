@@ -1,0 +1,6 @@
+/.idea
+/.vagrant
+/.vscode
+/var
+
+!/var/connect/UOL_PagSeguro.xml
