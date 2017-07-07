@@ -153,7 +153,7 @@ class UOL_PagSeguro_Helper_Canceled extends HelperData
 
     public function build($PagSeguroSummaryItem, $order)
     {
-        $PagSeguroStatusValue = $this->getPaymentStatusFromKey($PagSeguroSummaryItem->getStatus()->getValue());
+        $PagSeguroStatusValue = $this->getPaymentStatusFromKey($PagSeguroSummaryItem->getStatus());
         if ($order->getStatus() == $PagSeguroStatusValue) {
             $config = "class='action' data-config='".$order->getId().'/'.$PagSeguroSummaryItem->getCode().'/'.
                 $this->getPaymentStatusFromKey($PagSeguroSummaryItem->getStatus())."'";
