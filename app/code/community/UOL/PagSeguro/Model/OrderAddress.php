@@ -60,7 +60,7 @@ class UOL_PagSeguro_Model_OrderAddress
         $response->setDistrict($address->getStreet2());
         $response->setCity($address->getCity());
         $response->setPostalCode($address->getPostcode());
-        $response->setState($address->getRegionId());
+	    $response->setState(strtoupper($address->getRegion()));
         $response->setCountry($address->getCountry());
         $response->setComplement($address->getStreet3());
 

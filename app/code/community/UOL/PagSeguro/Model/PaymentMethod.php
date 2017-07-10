@@ -171,6 +171,8 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                     'CPF',
                     $params['cardHolderDocument']
                 );
+	            $orderAddress = new UOL_PagSeguro_Model_OrderAddress($this->order);
+	            $payment->setBilling()->setAddress()->instance($orderAddress->getBillingAddress());
                 break;
             case 'online-debit':
                 $payment = new \PagSeguro\Domains\Requests\DirectPayment\OnlineDebit();
@@ -181,8 +183,6 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                 );
                 break;
         }
-        $orderAddress = new UOL_PagSeguro_Model_OrderAddress($this->order);
-        $payment->setBilling()->setAddress()->instance($orderAddress->getBillingAddress());
         $payment->setSender()->setHash($params['senderHash']);
 
         /** @var \PagSeguro\Domains\Requests\DirectPayment\Boleto|\PagSeguro\Domains\Requests\DirectPayment\CreditCard|\PagSeguro\Domains\Requests\DirectPayment\OnlineDebit $payment */

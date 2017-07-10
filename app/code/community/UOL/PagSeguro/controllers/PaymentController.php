@@ -102,6 +102,7 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action
         $link = null;
         $result = null;
         $json = false;
+	    $redirect       = null;
         try {
             /** @var Mage_Sales_Model_Order $order */
             $order = Mage::getModel('sales/order')->load($this->getCheckout()->getLastOrderId());
@@ -120,6 +121,7 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action
                 if (method_exists($result, 'getPaymentLink') && $result->getPaymentLink()) {
                     $link = $result->getPaymentLink();
                     $json = true;
+	                $redirect = Mage::getUrl( 'pagseguro/payment/success' ) . '?redirect=' . $link;
                 }
                 $order->sendNewOrderEmail();
             } else {
@@ -137,6 +139,7 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action
             'order'          => $order,
             'result'         => $result,
             'link'           => $link,
+            'redirect'       => $redirect,
         ], $json);
     }
 
@@ -166,16 +169,19 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action
             Mage::logException($exception);
             $this->canceledStatus($order);
         }
-        if ($this->payment->getEnvironment() === 'production') {
-            $lightboxUrl = 'https://pagseguro.uol.com.br/v2/checkout/payment.html?code=';
-        } else {
-            $lightboxUrl = 'https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=';
-        }
+	    if ( $this->payment->getEnvironment() === 'production' ) {
+		    $lightboxJs = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
+		    $lightboxUrl = 'https://pagseguro.uol.com.br/v2/checkout/payment.html?code=';
+	    } else {
+		    $lightboxJs = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
+		    $lightboxUrl = 'https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=';
+	    }
 
-        return $this->loadAndRenderLayout([
-            'code'        => $code,
-            'lightboxUrl' => $lightboxUrl,
-        ]);
+	    return $this->loadAndRenderLayout( [
+		    'code'        => $code,
+		    'lightboxUrl' => $lightboxUrl,
+		    'lightboxJs' => $lightboxJs,
+	    ] );
     }
 
     /**

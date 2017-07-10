@@ -129,7 +129,6 @@
         }
     }
     function cardInstallmentOnChange(data) {
-        console.log(data);
         data = JSON.parse(data);
         document.getElementById("creditCardInstallment").value = data.quantity;
         document.getElementById("creditCardInstallmentValue").value = data.installmentAmount;

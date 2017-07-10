@@ -1,5 +1,5 @@
 <script type="text/javascript"
-        src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js">
+        src="<?= Mage::registry('lightboxJs') ?>">
 </script>
 
 <div class="page-head">
@@ -10,21 +10,28 @@
         PagSeguroLightbox(
             {code: '<?= Mage::registry('code') ?>'}, {
                 success: function (transactionCode) {
-                    console.log(transactionCode)
                 },
                 abort: function (err) {
-                    console.log(err)
                 }
             });
     };
+    function lightbox(){
+        PagSeguroLightbox(
+            {code: '<?= Mage::registry('code') ?>'}, {
+                success: function (transactionCode) {
+                },
+                abort: function (err) {
+                }
+            });
+    }
 </script>
 
 <table style="width:100%;">
     <tr>
         <td style="width:100%">
             Sa compra está em processo de finalização, aguarde um instante.<br>
-            Casa a página de pagamento não iniciar automaticamente
-            <a href="<?= Mage::registry('lightboxUrl') . Mage::registry('code') ?>" target="_blank">clique aqui</a>.
+            Se a página de pagamento não abrir automaticamente
+            <a onclick="lightbox()">clique aqui</a>.
         </td>
     </tr>
 </table>
