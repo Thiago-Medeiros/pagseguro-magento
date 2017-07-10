@@ -126,6 +126,11 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 			Mage::logException( $exception );
 			$this->canceledStatus( $order );
 		}
+		if ( $this->payment->getEnvironment() === 'production' ) {
+			$pagseguroJS  = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
+		} else {
+			$pagseguroJS  = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
+		}
 
 		return $this->loadAndRenderLayout( [
 			'paymentSession' => $paymentSession,
@@ -133,6 +138,7 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 			'result'         => $result,
 			'link'           => $link,
 			'redirect'       => $redirect,
+			'pagseguroJS'       => $pagseguroJS,
 		], $json );
 	}
 
