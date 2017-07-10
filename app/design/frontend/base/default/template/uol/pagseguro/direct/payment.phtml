@@ -33,7 +33,7 @@
             'senderHash': document.getElementById("senderHash").value,
             'method': 'online-debit'
         };
-        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, true)
+        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, true, true)
     }
     function formBilit() {
         var data = {
@@ -41,7 +41,7 @@
             'senderHash': document.getElementById("senderHash").value,
             'method': 'boleto'
         };
-        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, true)
+        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, true, true)
     }
     function formCreditCard(token) {
         var data = {
@@ -61,7 +61,7 @@
         postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data);
 
     }
-    function postAjax(url, data = null, link = null) {
+    function postAjax(url, data = null, link = null, redirect = null) {
         var params = typeof data === 'string' ? data : Object.keys(data).map(
             function (k) {
                 return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
@@ -75,6 +75,9 @@
                 var r = JSON.parse(xhr.responseText);
                 if (link) {
                     window.open(r.link, '_blank');
+                }
+                if(redirect){
+                    window.location.href = r.redirect;
                 }
             }
         };
