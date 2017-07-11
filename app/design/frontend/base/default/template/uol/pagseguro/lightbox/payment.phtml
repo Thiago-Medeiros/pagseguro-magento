@@ -7,24 +7,16 @@
 </div>
 <script type="text/javascript">
     window.onload = function () {
-        PagSeguroLightbox(
-            {code: '<?= Mage::registry( 'code' ) ?>'}, {
-                success: function (transactionCode) {
-                    console.log(transactionCode)
-                },
-                abort: function (err) {
-                    console.log(err)
-                }
-            });
+        lightbox();
     };
     function lightbox() {
         PagSeguroLightbox(
             {code: '<?= Mage::registry( 'code' ) ?>'}, {
-                success: function (transactionCode) {
-                    console.log(transactionCode);
+                success: function () {
+                    window.location.href = '<?= Mage::getUrl( 'pagseguro/payment/success' ) ?>';
                 },
-                abort: function (err) {
-                    console.log(err)
+                abort: function () {
+                    window.location.href = '<?= Mage::getUrl( 'pagseguro/payment/canceled' ) ?>';
                 }
             });
     }
