@@ -58,7 +58,7 @@
             'token': token.card.token,
             'senderHash': document.getElementById("senderHash").value
         };
-        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, null, true);
+        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, false, true);
 
     }
     function postAjax(url, data = null, link = false, redirect = false) {
@@ -74,10 +74,14 @@
             if (xhr.readyState > 3 && xhr.status === 200) {
                 var r = JSON.parse(xhr.responseText);
                 if (link) {
+                    console.log(r.link);
                     window.open(r.link, '_blank');
                 }
                 if(redirect){
-                    window.location.href = r.redirect;
+                    setTimeout(function () {
+                        console.log(r.redirect);
+                        window.location.href = r.redirect;
+                    }, 1000);
                 }
             }
         };
