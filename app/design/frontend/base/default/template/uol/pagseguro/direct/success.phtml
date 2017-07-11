@@ -3,9 +3,15 @@
 </div>
 <table style="width:100%;">
     <tr>
-        <td style="width:100%">
-            Se a página de pagamento não abrir automaticamente
-            <a href="<?= $_GET['redirect'] ?>" target="_blank">clique aqui</a>.
-        </td>
+		<?php if ($_GET['redirect']) { ?>
+            <td style="width:100%">
+                Se a página de pagamento não abrir automaticamente
+                <a href="<?= $_GET['redirect'] ?>" target="_blank">clique aqui</a>.
+            </td>
+		<?php } else { ?>
+            <td style="width:100%">
+                Assim que o pagamento for confirmado você receberá um e-mail para acompanhar  seu pedido.
+            </td>
+		<?php } ?>
     </tr>
 </table>

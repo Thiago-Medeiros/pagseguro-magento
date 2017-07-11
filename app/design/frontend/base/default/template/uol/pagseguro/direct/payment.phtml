@@ -58,10 +58,10 @@
             'token': token.card.token,
             'senderHash': document.getElementById("senderHash").value
         };
-        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data);
+        postAjax('<?= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) ?>pagseguro/payment/direct', data, null, true);
 
     }
-    function postAjax(url, data = null, link = null, redirect = null) {
+    function postAjax(url, data = null, link = false, redirect = false) {
         var params = typeof data === 'string' ? data : Object.keys(data).map(
             function (k) {
                 return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])

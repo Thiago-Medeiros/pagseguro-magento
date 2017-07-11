@@ -16,6 +16,12 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 		$this->payment = new UOL_PagSeguro_Model_PaymentMethod();
 	}
 
+	public function canceledAction() {
+		$order = Mage::getModel( 'sales/order' )->load( $this->getCheckout()->getLastOrderId() );
+		$this->canceledStatus( $order );
+		return $this->loadAndRenderLayout();
+	}
+
 	/**
 	 * @return UOL_PagSeguro_PaymentController
 	 */
@@ -115,6 +121,9 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 					$link     = $result->getPaymentLink();
 					$json     = true;
 					$redirect = Mage::getUrl( 'pagseguro/payment/success' ) . '?redirect=' . $link;
+				} else {
+					$json     = true;
+					$redirect = Mage::getUrl( 'pagseguro/payment/success' );
 				}
 				$order->sendNewOrderEmail();
 			} else {
@@ -127,9 +136,9 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 			$this->canceledStatus( $order );
 		}
 		if ( $this->payment->getEnvironment() === 'production' ) {
-			$pagseguroJS  = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
+			$pagseguroJS = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
 		} else {
-			$pagseguroJS  = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
+			$pagseguroJS = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js';
 		}
 
 		return $this->loadAndRenderLayout( [
@@ -138,7 +147,7 @@ class UOL_PagSeguro_PaymentController extends Mage_Core_Controller_Front_Action 
 			'result'         => $result,
 			'link'           => $link,
 			'redirect'       => $redirect,
-			'pagseguroJS'       => $pagseguroJS,
+			'pagseguroJS'    => $pagseguroJS,
 		], $json );
 	}
 

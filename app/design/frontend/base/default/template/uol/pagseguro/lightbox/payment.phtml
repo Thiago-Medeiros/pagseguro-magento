@@ -1,5 +1,5 @@
 <script type="text/javascript"
-        src="<?= Mage::registry('lightboxJs') ?>">
+        src="<?= Mage::registry( 'lightboxJs' ) ?>">
 </script>
 
 <div class="page-head">
@@ -8,19 +8,23 @@
 <script type="text/javascript">
     window.onload = function () {
         PagSeguroLightbox(
-            {code: '<?= Mage::registry('code') ?>'}, {
+            {code: '<?= Mage::registry( 'code' ) ?>'}, {
                 success: function (transactionCode) {
+                    console.log(transactionCode)
                 },
                 abort: function (err) {
+                    console.log(err)
                 }
             });
     };
-    function lightbox(){
+    function lightbox() {
         PagSeguroLightbox(
-            {code: '<?= Mage::registry('code') ?>'}, {
+            {code: '<?= Mage::registry( 'code' ) ?>'}, {
                 success: function (transactionCode) {
+                    console.log(transactionCode);
                 },
                 abort: function (err) {
+                    console.log(err)
                 }
             });
     }
