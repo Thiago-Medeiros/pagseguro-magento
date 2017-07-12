@@ -34,7 +34,7 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     public function __construct()
     {
         $this->library = new UOL_PagSeguro_Model_Library();
-        $this->helper = new UOL_PagSeguro_Helper_Data();
+        $this->helper  = new UOL_PagSeguro_Helper_Data();
     }
 
     /**
@@ -42,14 +42,14 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      */
     public function addPagseguroOrders(Mage_Sales_Model_Order $order)
     {
-        $orderId = $order->getEntityId();
+        $orderId    = $order->getEntityId();
         $enviroment = $this->library->getEnvironment();
-        $table = Mage::getConfig()->getTablePrefix().'pagseguro_orders';
-        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
-        $value = $read->query("SELECT `order_id` FROM `$table` WHERE `order_id` = $orderId");
-        if (!$value->fetch()) {
+        $table      = Mage::getConfig()->getTablePrefix().'pagseguro_orders';
+        $read       = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $value      = $read->query("SELECT `order_id` FROM `$table` WHERE `order_id` = $orderId");
+        if ( ! $value->fetch()) {
             $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $sql = "INSERT INTO `$table` (`order_id`, `environment`) VALUES ('$orderId', '$enviroment')";
+            $sql        = "INSERT INTO `$table` (`order_id`, `environment`) VALUES ('$orderId', '$enviroment')";
             $connection->query($sql);
         }
     }
@@ -171,8 +171,12 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                     'CPF',
                     $params['cardHolderDocument']
                 );
-	            $orderAddress = new UOL_PagSeguro_Model_OrderAddress($this->order);
-	            $payment->setBilling()->setAddress()->instance($orderAddress->getBillingAddress());
+                $payment->setSender()->setDocument()->withParameters(
+                    'CPF',
+                    $params['cardHolderDocument']
+                );
+                $orderAddress = new UOL_PagSeguro_Model_OrderAddress($this->order);
+                $payment->setBilling()->setAddress()->instance($orderAddress->getBillingAddress());
                 break;
             case 'online-debit':
                 $payment = new \PagSeguro\Domains\Requests\DirectPayment\OnlineDebit();
