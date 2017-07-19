@@ -2,32 +2,6 @@
         src="<?= Mage::registry('pagseguroJS') ?>">
 </script>
 <script type="text/javascript">
-   function showLoading(msg) {
-    if (jQuery('#pagseguro-loading-message:visible').length > 0) {
-      return false;
-    }
-
-    var html = Messages.getHtml({
-      id: 'pagseguro-loading-message',
-      type: 'loading',
-      size: 'medium',
-      message: msg,
-      tag: 'h3'
-    });
-
-    Messages.remove();
-    open({
-      html: html,
-      width:  330,
-      height: 600,
-      overlayClose: false,
-      escKey: false,
-      close: false
-    });
-
-    jQuery('#cboxClose').hide();
-    resize();
-  };
   window.onload = function () {
     setSessionId('<?= Mage::registry('paymentSession') ?>')
     assignSenderHash()
@@ -53,8 +27,17 @@
     }($j))
   })
 
+  function activeLoading() {
+    jQuery('#review-please-wait.please-wait').addClass('ps_msg_hidden');
+    jQuery('.btn-checkout').remove();
+    Modal.showLoading('Aguarde...');
+    jQuery('#pagseguro-loading-message h3').attr('style','min-width:210px; font-size: 16px !important;');
+    jQuery('#cboxContent').css('height','104px');
+  }
+
   function formDebit () {
     if (document.getElementById('debitDocument').value) {
+      activeLoading();
       var data = {
         'debitDocument': document.getElementById('debitDocument').value,
         'debitBankName': document.getElementById('debitbankName').value,
@@ -69,6 +52,7 @@
 
   function formBilit () {
     if (document.getElementById('bilitDocument').value) {
+      activeLoading();
       var data = {
         'bilitDocument': document.getElementById('bilitDocument').value,
         'senderHash': document.getElementById('senderHash').value,
@@ -81,7 +65,7 @@
   }
 
   function formCreditCard (token) {
-    Modal.showLoading('Aguarde');
+    activeLoading();
     var data = {
       'cardHolderDocument': document.getElementById('creditCardDocument').value,
       'cardNumber': document.getElementById('creditCardNum').value,
