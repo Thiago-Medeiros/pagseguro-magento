@@ -34,7 +34,7 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     public function __construct()
     {
         $this->library = new UOL_PagSeguro_Model_Library();
-        $this->helper  = new UOL_PagSeguro_Helper_Data();
+        $this->helper = new UOL_PagSeguro_Helper_Data();
     }
 
     /**
@@ -42,14 +42,14 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      */
     public function addPagseguroOrders(Mage_Sales_Model_Order $order)
     {
-        $orderId    = $order->getEntityId();
+        $orderId = $order->getEntityId();
         $enviroment = $this->library->getEnvironment();
-        $table      = Mage::getConfig()->getTablePrefix().'pagseguro_orders';
-        $read       = Mage::getSingleton('core/resource')->getConnection('core_read');
-        $value      = $read->query("SELECT `order_id` FROM `$table` WHERE `order_id` = $orderId");
-        if ( ! $value->fetch()) {
+        $table = Mage::getConfig()->getTablePrefix().'pagseguro_orders';
+        $read = Mage::getSingleton('core/resource')->getConnection('core_read');
+        $value = $read->query("SELECT `order_id` FROM `$table` WHERE `order_id` = $orderId");
+        if (!$value->fetch()) {
             $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-            $sql        = "INSERT INTO `$table` (`order_id`, `environment`) VALUES ('$orderId', '$enviroment')";
+            $sql = "INSERT INTO `$table` (`order_id`, `environment`) VALUES ('$orderId', '$enviroment')";
             $connection->query($sql);
         }
     }
@@ -123,6 +123,7 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
         $payment->setShipping()->setCost()->withParameters(number_format($this->order->getShippingAmount(), 2, '.',
             ''));
         $payment->setExtraAmount($this->order->getBaseDiscountAmount() + $this->order->getTaxAmount());
+        $payment->setNotificationUrl($this->getNotificationURL());
 
         return $payment;
     }
@@ -141,6 +142,17 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
                 round($product->getWeight())
             );
         }
+    }
+
+    private function getNotificationURL()
+    {
+        if ($this->getConfigData('notification')) {
+            $notificationUrl = Mage::app()->getStore(0)->getBaseUrl().Mage::getStoreConfig('payment/pagseguro/notification');
+        } else {
+            $notificationUrl = Mage::app()->getStore(0)->getBaseUrl().'pagseguro/notification/send/';
+        }
+
+        return $notificationUrl;
     }
 
     /**
@@ -206,7 +218,7 @@ class UOL_PagSeguro_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     /**
      * @param \PagSeguro\Domains\Requests\DirectPayment\Boleto|\PagSeguro\Domains\Requests\DirectPayment\CreditCard|\PagSeguro\Domains\Requests\DirectPayment\OnlineDebit|\PagSeguro\Domains\Requests\Payment $payment
      *
-     * @param bool                                                                                                                                                                                            $code
+     * @param bool $code
      *
      * @return bool|\PagSeguro\Domains\Requests\DirectPayment\Boleto $response
      */

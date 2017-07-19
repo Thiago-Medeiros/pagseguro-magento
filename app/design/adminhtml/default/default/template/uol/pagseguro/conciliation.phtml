@@ -1,6 +1,6 @@
 <?php
 $helper = Mage::helper('pagseguro/conciliation');
-$html = Mage::helper('pagseguro/html');
+$html   = Mage::helper('pagseguro/html');
 ?>
 
 <div id="pagseguro-module">
@@ -59,10 +59,10 @@ $html = Mage::helper('pagseguro/html');
                 </table>
 
                 <?php
-                $noTransaction = 'Nenhum resultado.';
+                $noTransaction         = 'Nenhum resultado.';
                 $noTransactionSelected = $helper->__("Selecione pelo menos um campo da coluna 'Selecionar'.");
-                $transactionSuccess = $helper->__("Transação conciliada com sucesso!");
-                $transactionsSuccess = $helper->__("Transações conciliadas com sucesso!");
+                $transactionSuccess    = $helper->__("Transação conciliada com sucesso!");
+                $transactionsSuccess   = $helper->__("Transações conciliadas com sucesso!");
                 ?>
 
                 <div id="conciliation-info" class="pagseguro-msg pagseguro-msg-info pagseguro-msg-micro">

@@ -14,8 +14,8 @@ class UOL_PagSeguro_Model_Library
         define("SHIPPING_COST", 0.00);
         define("CURRENCY", "BRL");
         \PagSeguro\Library::initialize();
-        \PagSeguro\Library::cmsVersion()->setName('PagSeguro')->setRelease('1.0.0'); //TODO localizr no sistema
-        \PagSeguro\Library::moduleVersion()->setName('Magento')->setRelease('1.0.0'); //TODO localizr no sistema
+        \PagSeguro\Library::cmsVersion()->setName('PagSeguro')->setRelease(Mage::getConfig()->getModuleConfig("UOL_PagSeguro")->version);
+        \PagSeguro\Library::moduleVersion()->setName('Magento')->setRelease(Mage::getVersion());
         \PagSeguro\Configuration\Configure::setCharset(Mage::getStoreConfig('payment/pagseguro/charset'));
         $this->setCharset();
         $this->setEnvironment();
@@ -45,7 +45,7 @@ class UOL_PagSeguro_Model_Library
     {
         if (Mage::getStoreConfig('payment/pagseguro/log')) {
             \PagSeguro\Configuration\Configure::setLog(true,
-                Mage::getBaseDir().Mage::getStoreConfig('payment/pagseguro/log'));
+                Mage::getBaseDir().Mage::getStoreConfig('payment/pagseguro/log_file'));
         } else {
             \PagSeguro\Configuration\Configure::setLog(false, null);
         }

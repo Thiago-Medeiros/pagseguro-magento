@@ -39,14 +39,6 @@ class UOL_PagSeguro_Model_OrderAddress
     }
 
     /**
-     * @return \PagSeguro\Domains\Address
-     */
-    public function getShippingAddress()
-    {
-        return $this->setAddress($this->shippingAddress);
-    }
-
-    /**
      * @param Mage_Sales_Model_Order_Address $address
      *
      * @return \PagSeguro\Domains\Address
@@ -60,7 +52,7 @@ class UOL_PagSeguro_Model_OrderAddress
         $response->setDistrict($address->getStreet2());
         $response->setCity($address->getCity());
         $response->setPostalCode($address->getPostcode());
-	    $response->setState(strtoupper($address->getRegion()));
+        $response->setState($this->getRegionAbbreviation($address));
         $response->setCountry($address->getCountry());
         $response->setComplement($address->getStreet3());
 
@@ -82,5 +74,33 @@ class UOL_PagSeguro_Model_OrderAddress
             'street' => $street,
             'number' => $number,
         );
+    }
+
+    /**
+     * Get a brazilian region name and return the abbreviation if it exists
+     *
+     * @param address $address
+     *
+     * @return string
+     */
+    private function getRegionAbbreviation($address)
+    {
+        if (!is_null($address->getRegionCode()) && strlen($address->getRegionCode()) == 2) {
+            return strtoupper($address->getRegionCode());
+        }
+
+        $addressEnum = new \PagSeguro\Enum\Address();
+
+        return (is_string($addressEnum->getType($address->getRegion()))) ?
+            strtoupper($addressEnum->getType($address->getRegion())) :
+            strtoupper($address->getRegion());
+    }
+
+    /**
+     * @return \PagSeguro\Domains\Address
+     */
+    public function getShippingAddress()
+    {
+        return $this->setAddress($this->shippingAddress);
     }
 }
